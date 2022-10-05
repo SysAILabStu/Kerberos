@@ -1,6 +1,7 @@
 from db_select import DBSelect
 from db_insert import DBInsert
 from db_update import DBUpdate
+from db_delete import DBDelete
 from config import *
 
 
@@ -21,14 +22,25 @@ two_search_keys = ['farm_no', 'farm_name']
 two_search_data = [1111, '진우네 농장']
 
 # 수정데이터 예시
+
 #set_key = 바꿀 데이터
 set_key = ['farm_no', ]
 set_value = [3333, ]
+
 #update_key = 기존 데이터
 update_key = ['farm_no', ]
 update_value = [1111, ]
+
+# 삭제 데이터 예시
+one_delete_key = 'farm_no'
+one_delete_data = 1111
+
+two_delete_key = ['farm_no', 'cow_no']
+two_delete_data = [1111, 1]
+
+
 # farm_info 테이블에 데이터 입력 예시
-DBInsert.table('farm_info', farm_info_cols, farm_info_insertvalue, False, False)
+# DBInsert.table('farm_info', farm_info_cols, farm_info_insertvalue, False, False)
 
 # farm_detail 테이블에 데이터 입력 예시
 # DBInsert.table('farm_detail', farm_detail_cols, farm_detail_insertvalue)
@@ -52,3 +64,15 @@ DBInsert.table('farm_info', farm_info_cols, farm_info_insertvalue, False, False)
 
 # 테이블 데이터 수정 예시
 # DBUpdate.update('farm_info', set_key, set_value, update_key, update_value)
+
+# 테이블 삭제
+# DBDelete.table('farm_info')
+
+# 해당 테이블의 전체 데이터 삭제
+# DBDelete.table_allInfo('farm_info')
+
+# 조건 하나를 사용하여 테이블의 데이터 삭제
+# DBDelete.one_delete_key('farm_info', one_delete_key, one_delete_data)
+
+# 조건 두개를 사용하여 테이블의 데이터 삭제
+# DBDelete.two_delete_keys('farm_info', two_delete_key, two_delete_data)
