@@ -9,7 +9,6 @@ owner_cols = ["telegram_id", "farm_no"]
 doctor_cols = ["doctor_name", "doctor_phone", "doctor_mail"]
 farm_info_cols = ["farm_no", "farm_name", "farm_image"]
 
-
 import os
 
 #if os.path.isfile("./instance/config.py"):
