@@ -1,0 +1,30 @@
+CREATE TABLE FARM
+(
+    farm_no INTEGER PRIMARY KEY,
+    cow_no INTEGER,
+    cow_estrous DATE,
+    cow_pregnent DATE)
+)
+
+CREATE TABLE ONWER
+(
+    telegram_ID INTEGER PRIMARY KEY,
+    farm_no INTEGER)
+)
+
+ALTER TABLE OWNER
+ADD CONSTRAINT FK_farm_no
+FOREIGN KEY (farm_no)
+REFERENCES (farm_no);
+
+ALTER TABLE OWNER
+ADD CONSTRAINT UP_farm_no
+FOREIGN KEY (farm_no)
+REFERENCES (farm_no);
+ON UPDATE CASCADE;
+
+ALTER TABLE OWNER
+ADD CONSTRAINT DEL_farm_no
+FOREIGN KEY (farm_no)
+REFERENCES (farm_no);
+ON DELETE CASCADE;
