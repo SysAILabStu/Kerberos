@@ -46,7 +46,7 @@ class DBInsert(DBManager):
 
 
         con = DBManager.connect()
-        DBManager.insert(con, sql)
+        DBManager.commit(con, sql)
 
 
 
