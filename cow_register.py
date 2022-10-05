@@ -107,7 +107,8 @@ class Cow_RG():
 
         if pragment_data == 'O':
             context.user_data[PRAGMENT_] = dt.datetime.now()
-
+        else:
+            context.user_data[PRAGMENT_] = None
 
         estrous_list = ['O', 'X']
         buttons = []
@@ -138,23 +139,21 @@ class Cow_RG():
 
         if estrous_data == 'O':
             context.user_data[ESTROUS_] = dt.datetime.now()
+        else:
+            context.user_data[ESTROUS_] = None
 
-        if DBSelect.one_search_key(context.user_data[COW_INPUT]):
-            DBUpdate.update('FARM',['farm_no','cow_no'],[str(self.u_id),context.user_data[COW_INPUT]],['cow_estrous','cow_pregnent',],\
+        if DBSelect.two_search_keys('farm_detail',['cow_no'],['farm_no','cow_no',] ,[self.u_id,context.user_data[COW_INPUT],]):
+            DBUpdate.update('farm_detail',['farm_no','cow_no'],[str(self.u_id),context.user_data[COW_INPUT]],['cow_estrous','cow_pregnent',],\
                 [context.user_data[PRAGMENT_],context.user_data[ESTROUS_]])
         else:
             if context.user_data[PRAGMENT_] != None and context.user_data[ESTROUS_] == None : 
-                DBInsert.table('FARM', ['farm_no','cow_no','cow_estrous','cow_pregnent',],\
-                    [str(self.u_id),context.user_data[COW_INPUT],context.user_data[PRAGMENT_],context.user_data[ESTROUS_],],True, False)
+                DBInsert.table('farm_detail', ['farm_no','cow_no','cow_estrous','cow_pregnent',],[str(self.u_id),context.user_data[COW_INPUT],context.user_data[PRAGMENT_],context.user_data[ESTROUS_],],True, False)
             elif context.user_data[PRAGMENT_] == None and context.user_data[ESTROUS_] != None:
-                DBInsert.table('FARM', ['farm_no','cow_no','cow_estrous','cow_pregnent',],\
-                    [str(self.u_id),context.user_data[COW_INPUT],context.user_data[PRAGMENT_],context.user_data[ESTROUS_],], False,True)
+                DBInsert.table('farm_detail', ['farm_no','cow_no','cow_estrous','cow_pregnent',],[str(self.u_id),context.user_data[COW_INPUT],context.user_data[PRAGMENT_],context.user_data[ESTROUS_],], False,True)
             elif context.user_data[PRAGMENT_] != None and context.user_data[ESTROUS_] != None:
-                DBInsert.table('FARM', ['farm_no','cow_no','cow_estrous','cow_pregnent',], \
-                    [str(self.u_id),context.user_data[COW_INPUT],context.user_data[PRAGMENT_],context.user_data[ESTROUS_],], True,True)
+                DBInsert.table('farm_detail', ['farm_no','cow_no','cow_estrous','cow_pregnent',], [str(self.u_id),context.user_data[COW_INPUT],context.user_data[PRAGMENT_],context.user_data[ESTROUS_],], True,True)
             else:
-                DBInsert.table('FARM', ['farm_no','cow_no','cow_estrous','cow_pregnent',],\
-                    [str(self.u_id),context.user_data[COW_INPUT],context.user_data[PRAGMENT_],context.user_data[ESTROUS_],], False, False)
+                DBInsert.table('farm_detail', ['farm_no','cow_no','cow_estrous','cow_pregnent',],[str(self.u_id),context.user_data[COW_INPUT],context.user_data[PRAGMENT_],context.user_data[ESTROUS_],], False, False)
 
         context.bot.send_message(self.u_id,text = f"모든 정보 입력이 완료되었습니다.\n재시작을 원하신다면 '/start'를 눌러주세요")
         # update.callback_query.answer()

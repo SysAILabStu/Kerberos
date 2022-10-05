@@ -1,4 +1,4 @@
-CREATE TABLE FARM
+CREATE TABLE farm_detail
 (
     farm_no INTEGER PRIMARY KEY,
     cow_no INTEGER,
@@ -26,7 +26,7 @@ CREATE TABLE farm_info
     farm_image LONGBLOB
 )
 
-
+'''
 ALTER TABLE farm_detail
 ADD CONSTRAINT FK_farm_info_farm_detail
 FOREIGN KEY (farm_no)
@@ -61,3 +61,4 @@ ADD CONSTRAINT del_farm_info_owner
 FOREIGN KEY (farm_no)
 REFERENCES farm_info (farm_no)
 ON DELETE CASCADE;
+'''
