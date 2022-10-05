@@ -16,6 +16,9 @@ select_one_value = ['farm_no', ]
 one_search_key = 'farm_no'
 one_search_data = 1111
 
+two_search_keys = ['farm_no', 'farm_name']
+two_search_data = [1111, '진우네 농장']
+
 # farm_info 테이블에 데이터 입력 예시
 # DBInsert.table('farm_info', farm_info_cols, farm_info_insertvalue, False)
 
@@ -32,7 +35,9 @@ one_search_data = 1111
 # DBSelect.selectAll('farm_info', select_all_value)
 
 # 조건 하나를 이용하여 데이터 조회 예시
-# DBSelect.one_search_key('farm_info', select_one_value, one_search_key, one_search_data)
-# DBSelect.one_search_key('farm_info', select_all_value, one_search_key, one_search_data)
+# print(DBSelect.one_search_key('farm_info', select_one_value, one_search_key, one_search_data))
+# print(DBSelect.one_search_key('farm_info', select_all_value, one_search_key, one_search_data))
 
-
+# 조건 두개를 이용하여 데이터 조회 예시
+# print(DBSelect.two_search_keys('farm_info', select_one_value, two_search_keys, two_search_data))
+# print(DBSelect.two_search_keys('farm_info', select_all_value, two_search_keys, two_search_data))
