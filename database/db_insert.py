@@ -1,4 +1,4 @@
-from database.db_manager import DBManager
+from .db_manager import DBManager
 
 class DBInsert(DBManager):
     def table(tb_name, tbl_cols, values, setDate):
@@ -42,8 +42,6 @@ class DBInsert(DBManager):
         """
 
         print(sql)
-
-
 
         con = DBManager.connect()
         DBManager.commit(con, sql)

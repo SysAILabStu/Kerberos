@@ -1,4 +1,4 @@
-from db_manager import DBManager
+from .db_manager import DBManager
 
 
 class DBSelect(DBManager):
@@ -93,3 +93,5 @@ class DBSelect(DBManager):
         rows = DBManager.fetchall(con, sql)
 
         print(rows)
+
+        return rows
