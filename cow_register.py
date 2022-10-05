@@ -1,8 +1,11 @@
 from importlib.metadata import entry_points
 from database.db_select import *
 from database.db_insert import *
+from database.db_update import *
 from telegram import *
 from telegram.ext import *
+
+import datetime as dt
 
 from integrated_definition import *
 
@@ -32,9 +35,10 @@ class Cow_RG():
     #등록할 소의 축사 번호 선택
     def Cow_Region_select(self, update: Update, context: CallbackContext)->str:
         self.u_id  = update.effective_chat.id
-        print(self.u_id)
+    
         #데이터베이스에서 부지명 가져오기(입력값 : self.u_id)
-        region_list = DBSelect.one_search_key([self.u_id,])
+        region_list =DBSelect.one_search_key('farm_info', ['farm_name',] , 'farm_no', str(self.u_id))[0]
+
         buttons = []
         if region_list:
             #부지 수에 따른 버튼 생성(데이터베이스에 들어있음 : 지역)
@@ -61,7 +65,7 @@ class Cow_RG():
         region_data = update.callback_query.data
         print(f'{region_data}선택한 부지')
         # context.bot.send_message(self.u_id,text = "소 등록번호를 입력해주세요")
-        text = '소 등록번호를 입력해주세요'
+        text = '소 등록번호를 입력해주세요(삽입/수정)'
         update.callback_query.answer()
         update.callback_query.edit_message_text(text)
 
@@ -71,9 +75,9 @@ class Cow_RG():
     #등록할 소의 번호 데이터베이스 저장
     def Cow_number_output(self, update: Update, context: CallbackContext):
         input_data = update.message.text
+        context.user_data[COW_INPUT] = input_data
         #text 입력 받은후 데이터베이스 저장 코드 필요
         print(f'{input_data}입력한 소등록번호')
-
 
         #없어도 되는 텍스트
         context.bot.send_message(self.u_id,text = "소 등록번호 입력이 완료되었습니다.")
@@ -101,6 +105,10 @@ class Cow_RG():
         pragment_data = update.callback_query.data
         print(f'{pragment_data}임신여부 선택')
 
+        if pragment_data == 'O':
+            context.user_data[PRAGMENT_] = dt.datetime.now()
+
+
         estrous_list = ['O', 'X']
         buttons = []
 
@@ -117,10 +125,36 @@ class Cow_RG():
 
         return ESTROUS_
         
+
+    # farm_no INTEGER PRIMARY KEY,
+    # cow_no INTEGER,
+    # cow_estrous DATE,
+    # cow_pregnent DATE
+
     #소 입력 끝 , 입력한 소 정보 보여주기
     def Cow_end(self, update: Update, context: CallbackContext)->str:
         estrous_data = update.callback_query.data
         print(f'{estrous_data}발정여부')
+
+        if estrous_data == 'O':
+            context.user_data[ESTROUS_] = dt.datetime.now()
+
+        if DBSelect.one_search_key(context.user_data[COW_INPUT]):
+            DBUpdate.update('FARM',['farm_no','cow_no'],[str(self.u_id),context.user_data[COW_INPUT]],['cow_estrous','cow_pregnent',],\
+                [context.user_data[PRAGMENT_],context.user_data[ESTROUS_]])
+        else:
+            if context.user_data[PRAGMENT_] != None and context.user_data[ESTROUS_] == None : 
+                DBInsert.table('FARM', ['farm_no','cow_no','cow_estrous','cow_pregnent',],\
+                    [str(self.u_id),context.user_data[COW_INPUT],context.user_data[PRAGMENT_],context.user_data[ESTROUS_],],True, False)
+            elif context.user_data[PRAGMENT_] == None and context.user_data[ESTROUS_] != None:
+                DBInsert.table('FARM', ['farm_no','cow_no','cow_estrous','cow_pregnent',],\
+                    [str(self.u_id),context.user_data[COW_INPUT],context.user_data[PRAGMENT_],context.user_data[ESTROUS_],], False,True)
+            elif context.user_data[PRAGMENT_] != None and context.user_data[ESTROUS_] != None:
+                DBInsert.table('FARM', ['farm_no','cow_no','cow_estrous','cow_pregnent',], \
+                    [str(self.u_id),context.user_data[COW_INPUT],context.user_data[PRAGMENT_],context.user_data[ESTROUS_],], True,True)
+            else:
+                DBInsert.table('FARM', ['farm_no','cow_no','cow_estrous','cow_pregnent',],\
+                    [str(self.u_id),context.user_data[COW_INPUT],context.user_data[PRAGMENT_],context.user_data[ESTROUS_],], False, False)
 
         context.bot.send_message(self.u_id,text = f"모든 정보 입력이 완료되었습니다.\n재시작을 원하신다면 '/start'를 눌러주세요")
         # update.callback_query.answer()
