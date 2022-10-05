@@ -1,7 +1,7 @@
 from db_manager import DBManager
 
 class DBUpdate(DBManager):
-    def update(self, db_name, tb_name, set_key, set_value, update_key, update_value):
+    def update(tbl_name, set_key, set_value, update_key, update_value):
         """
         sey_key = ['set_key1', 'set_key2'...]
         set_value = ['set_value1', 'set_value2'...]
@@ -19,11 +19,13 @@ class DBUpdate(DBManager):
         sql_w = sql_w[:-5]
 
         sql = f"""
-        UPDATE {tb_name}
+        UPDATE {tbl_name}
         SET {sql_s}
         WHERE {sql_w}
         """
 
+        print(sql)
+
         con = DBManager.connect()
 
-        DBManager.select(con, sql)
+        DBManager.commit(con, sql)

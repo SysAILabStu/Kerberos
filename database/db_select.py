@@ -18,7 +18,7 @@ class DBSelect(DBManager):
         
         con = DBManager.connect()
 
-        rows = DBManager.select(con, sql)
+        rows = DBManager.fetchall(con, sql)
 
         return rows
     
@@ -43,7 +43,7 @@ class DBSelect(DBManager):
         """
         con = DBManager.connect()
 
-        rows = DBManager.select(con, sql)
+        rows = DBManager.fetchall(con, sql)
 
         return rows
     
@@ -71,7 +71,7 @@ class DBSelect(DBManager):
 
         con = DBManager.connect()
 
-        rows = DBManager.select(con, sql)  
+        rows = DBManager.fetchall(con, sql)  
 
         return rows
 
@@ -90,6 +90,6 @@ class DBSelect(DBManager):
         
         con = DBManager.connect()
 
-        rows = DBManager.select(con, sql)
+        rows = DBManager.fetchall(con, sql)
 
         print(rows)

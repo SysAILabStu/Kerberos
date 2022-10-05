@@ -19,13 +19,13 @@ class DBManager:
 
         return con
 
-    def insert(con, sql):
+    def commit(con, sql):
         cur = con.cursor()
         cur.execute(sql)
         con.commit()
         con.close
 
-    def select(con, sql):
+    def fetchall(con, sql):
         cur = con.cursor()
         cur.execute(sql)
         rows = cur.fetchall()
