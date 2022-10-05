@@ -34,6 +34,7 @@ class DBInsert(DBManager):
         VALUES ({sql_data})
         """
 
+
         con = DBManager.connect()
         DBManager.commit(con, sql)
 

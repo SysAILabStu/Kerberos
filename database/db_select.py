@@ -92,5 +92,7 @@ class DBSelect(DBManager):
 
         rows = DBManager.fetchall(con, sql)
 
+        print(rows)
+
         return rows
 
