@@ -91,5 +91,3 @@ class DBSelect(DBManager):
         con = DBManager.connect()
 
         rows = DBManager.fetchall(con, sql)
-
-        print(rows)

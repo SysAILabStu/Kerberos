@@ -8,7 +8,6 @@ class DBInsert(DBManager):
         """
 
         arg = [f"{x}" for x in tbl_cols]
-        print(arg)
 
         if 'idx' in arg:
             del arg[arg.index('idx')]
@@ -27,7 +26,6 @@ class DBInsert(DBManager):
         
         data = []
 
-        print(values)
 
         for i in values:
             v = "'" + str(i) + "'"
@@ -40,8 +38,6 @@ class DBInsert(DBManager):
         {tb_name}({sql_q})
         VALUES ({sql_data})
         """
-
-        print(sql)
 
 
 

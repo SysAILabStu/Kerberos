@@ -24,8 +24,6 @@ class DBUpdate(DBManager):
         WHERE {sql_w}
         """
 
-        print(sql)
-
         con = DBManager.connect()
 
         DBManager.commit(con, sql)

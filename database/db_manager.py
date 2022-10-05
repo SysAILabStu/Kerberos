@@ -20,14 +20,18 @@ class DBManager:
         return con
 
     def commit(con, sql):
+        print(sql)
         cur = con.cursor()
         cur.execute(sql)
         con.commit()
         con.close
 
     def fetchall(con, sql):
+        print(sql)
         cur = con.cursor()
         cur.execute(sql)
         rows = cur.fetchall()
+        for i in rows:
+            print(i)
         return rows
 
