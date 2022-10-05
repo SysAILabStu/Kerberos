@@ -1,6 +1,5 @@
 from .db_manager import DBManager
 
-
 class DBInsert(DBManager):
     def table(tb_name, tbl_cols, values, setEstrous = False, setPregnent = False):
         """
