@@ -107,9 +107,9 @@ class Cow_RG():
         print(f'{pragment_data}임신여부 선택')
 
         if pragment_data == 'O':
-            context.user_data[PRAGMENT_] = datetime.datetime.now().strftime("%Y-%M-%D")
+            context.user_data[PRAGMENT_] = datetime.datetime.now().strftime("%y-%m-%d")
         else:
-            context.user_data[PRAGMENT_] = '0000-00-00/00/00'
+            context.user_data[PRAGMENT_] = None
         estrous_list = ['O', 'X']
         buttons = []
 
@@ -132,9 +132,9 @@ class Cow_RG():
         print(f'{estrous_data}발정여부')
 
         if estrous_data == 'O':
-            context.user_data[ESTROUS_] = datetime.datetime.now().strftime("%Y-%M-%D")
+            context.user_data[ESTROUS_] = datetime.datetime.now().strftime("%y-%m-%d")
         else:
-            context.user_data[ESTROUS_] = '0000-00-00/00/00'
+            context.user_data[ESTROUS_] = None
             
         print([str(self.u_id),context.user_data[COW_INPUT],context.user_data[PRAGMENT_],context.user_data[ESTROUS_]])
 
