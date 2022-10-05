@@ -2,10 +2,11 @@ from importlib.metadata import entry_points
 from database.db_select import *
 from database.db_insert import *
 from database.db_update import *
+from database.config import *
 from telegram import *
 from telegram.ext import *
 
-import datetime as dt
+import datetime
 
 from integrated_definition import *
 
@@ -106,10 +107,9 @@ class Cow_RG():
         print(f'{pragment_data}임신여부 선택')
 
         if pragment_data == 'O':
-            context.user_data[PRAGMENT_] = dt.datetime.now()
+            context.user_data[PRAGMENT_] = datetime.datetime.now().strftime("%Y-%M-%D")
         else:
-            context.user_data[PRAGMENT_] = None
-
+            context.user_data[PRAGMENT_] = '0000-00-00/00/00'
         estrous_list = ['O', 'X']
         buttons = []
 
@@ -118,8 +118,7 @@ class Cow_RG():
 
         keyboard = InlineKeyboardMarkup(buttons,one_time_keyboard=True)
 
-        # context.bot.send_message(self.u_id,text = "발정여부를 선택해주세요",\
-        #     reply_markup = keyboard)
+  
         text =  "발정여부를 선택해주세요"
         update.callback_query.answer()
         update.callback_query.edit_message_text(text,reply_markup = keyboard)
@@ -127,33 +126,30 @@ class Cow_RG():
         return ESTROUS_
         
 
-    # farm_no INTEGER PRIMARY KEY,
-    # cow_no INTEGER,
-    # cow_estrous DATE,
-    # cow_pregnent DATE
-
     #소 입력 끝 , 입력한 소 정보 보여주기
     def Cow_end(self, update: Update, context: CallbackContext)->str:
         estrous_data = update.callback_query.data
         print(f'{estrous_data}발정여부')
 
         if estrous_data == 'O':
-            context.user_data[ESTROUS_] = dt.datetime.now()
+            context.user_data[ESTROUS_] = datetime.datetime.now().strftime("%Y-%M-%D")
         else:
-            context.user_data[ESTROUS_] = None
+            context.user_data[ESTROUS_] = '0000-00-00/00/00'
+            
+        print([str(self.u_id),context.user_data[COW_INPUT],context.user_data[PRAGMENT_],context.user_data[ESTROUS_]])
 
         if DBSelect.two_search_keys('farm_detail',['cow_no'],['farm_no','cow_no',] ,[self.u_id,context.user_data[COW_INPUT],]):
-            DBUpdate.update('farm_detail',['farm_no','cow_no'],[str(self.u_id),context.user_data[COW_INPUT]],['cow_estrous','cow_pregnent',],\
-                [context.user_data[PRAGMENT_],context.user_data[ESTROUS_]])
+            DBUpdate.update('farm_detail',['cow_pregnant','cow_estrous',],[context.user_data[PRAGMENT_],context.user_data[ESTROUS_]],['farm_no','cow_no'],\
+                [str(self.u_id),context.user_data[COW_INPUT]])
         else:
             if context.user_data[PRAGMENT_] != None and context.user_data[ESTROUS_] == None : 
-                DBInsert.table('farm_detail', ['farm_no','cow_no','cow_estrous','cow_pregnent',],[str(self.u_id),context.user_data[COW_INPUT],context.user_data[PRAGMENT_],context.user_data[ESTROUS_],],True, False)
+                DBInsert.table('farm_detail', farm_detail_cols,[str(self.u_id),context.user_data[COW_INPUT],context.user_data[PRAGMENT_]],True, False)
             elif context.user_data[PRAGMENT_] == None and context.user_data[ESTROUS_] != None:
-                DBInsert.table('farm_detail', ['farm_no','cow_no','cow_estrous','cow_pregnent',],[str(self.u_id),context.user_data[COW_INPUT],context.user_data[PRAGMENT_],context.user_data[ESTROUS_],], False,True)
+                DBInsert.table('farm_detail', farm_detail_cols,[str(self.u_id),context.user_data[COW_INPUT],context.user_data[ESTROUS_]], False,True)
             elif context.user_data[PRAGMENT_] != None and context.user_data[ESTROUS_] != None:
-                DBInsert.table('farm_detail', ['farm_no','cow_no','cow_estrous','cow_pregnent',], [str(self.u_id),context.user_data[COW_INPUT],context.user_data[PRAGMENT_],context.user_data[ESTROUS_],], True,True)
+                DBInsert.table('farm_detail',farm_detail_cols, [str(self.u_id),context.user_data[COW_INPUT],context.user_data[PRAGMENT_],context.user_data[ESTROUS_]], True,True)
             else:
-                DBInsert.table('farm_detail', ['farm_no','cow_no','cow_estrous','cow_pregnent',],[str(self.u_id),context.user_data[COW_INPUT],context.user_data[PRAGMENT_],context.user_data[ESTROUS_],], False, False)
+                DBInsert.table('farm_detail', farm_detail_cols,[str(self.u_id),context.user_data[COW_INPUT]], False, False)
 
         context.bot.send_message(self.u_id,text = f"모든 정보 입력이 완료되었습니다.\n재시작을 원하신다면 '/start'를 눌러주세요")
         # update.callback_query.answer()
