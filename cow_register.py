@@ -34,22 +34,26 @@ class Cow_RG():
         self.u_id  = update.effective_chat.id
         print(self.u_id)
         #데이터베이스에서 부지명 가져오기(입력값 : self.u_id)
-        region_list = ['부지1', '부지2']
+        region_list = DBSelect.one_search_key([self.u_id,])
         buttons = []
+        if region_list:
+            #부지 수에 따른 버튼 생성(데이터베이스에 들어있음 : 지역)
+            for rg in region_list:
+                buttons.append([InlineKeyboardButton(text = rg, callback_data = rg)],)
 
-        #부지 수에 따른 버튼 생성(데이터베이스에 들어있음 : 지역)
-        for rg in region_list:
-            buttons.append([InlineKeyboardButton(text = rg, callback_data = rg)],)
+            keyboard = InlineKeyboardMarkup(buttons,one_time_keyboard=True)
 
-        keyboard = InlineKeyboardMarkup(buttons,one_time_keyboard=True)
+            context.bot.send_message(self.u_id,text = "부지를 선택해주세요",\
+                reply_markup = keyboard)
+            # text = '부지를 선택해주세요'
+            # update.callback_query.answer()
+            # update.callback_query.edit_message_text(text,reply_markup = keyboard)
 
-        context.bot.send_message(self.u_id,text = "부지를 선택해주세요",\
-            reply_markup = keyboard)
-        # text = '부지를 선택해주세요'
-        # update.callback_query.answer()
-        # update.callback_query.edit_message_text(text,reply_markup = keyboard)
-
-        return REGION_SELECT
+            return REGION_SELECT
+        
+        else:
+            context.bot.send_message(self.u_id,text = "부지를 먼저 입력해주세요\n 재사작'/start")
+            return ConversationHandler.END
 
     #등록할 소의 번호 입력
     def Cow_number_input(self, update: Update, context: CallbackContext) -> int:
