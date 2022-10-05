@@ -10,13 +10,15 @@ from global_variable import *
 from database.db_manager import DBManager
 from database.db_insert import DBInsert
 from database.config import *
+from database.db_select import *
+
 
 class Farm():
     def __init__(self):
 
         con = DBManager.connect()
 
-
+        
         updater = Updater("5431097144:AAGt813IWJ_eDJVJjngYec0koEux9w_w8wI")
         dispatcher = updater.dispatcher 
 
@@ -54,7 +56,8 @@ class Farm():
 
     #부지 메뉴 시작
     def farm_select(self, update:Update, context:CallbackContext) -> None:
-    
+
+        self.user_id = update.effective_chat.id
         btn_list = []
         btn_list.append(InlineKeyboardButton("부지 확인", callback_data="1"))
         btn_list.append(InlineKeyboardButton("부지 추가", callback_data="2"))
@@ -93,14 +96,25 @@ class Farm():
 
     #부지 확인
     def farm_confirm(self, update: Update, context: CallbackContext) -> None:
+        
         show_list = []
-        for i in range(len(context.user_data['farm_name'])):
-            # print(context.user_data['PHOTO_SAVE'][i].split(','))
-            show_list.append([InlineKeyboardButton(f"{context.user_data['farm_name'][i]}",\
-                callback_data=f"{context.user_data['farm_name'][i]}")])
-        show_markup = InlineKeyboardMarkup(show_list)
+        data_list = []
+        select_one_value = ['farm_name' ]
 
-        update.message.reply_text("나의 부지",reply_markup=show_markup)
+        data = DBSelect.selectAll('farm_info', select_one_value)
+
+        for i in data:
+            data_list.append(i[0])
+
+        for i in range(len(data_list)):
+            show_list.append([InlineKeyboardButton(f"{data_list[i]}",\
+                callback_data=f"{data_list[i]}")])
+
+        print(data_list)
+
+        show_markup = InlineKeyboardMarkup(show_list)
+        
+        context.bot.send_message(self.user_id,"나의 부지", reply_markup=show_markup)
 
         return FARM_CLICK
     #========================================================================
@@ -112,19 +126,15 @@ class Farm():
 
         #TEST#
 
-        context.user_data['farm_name'] = ['-']
-    
+        context.user_data['farm_name'] = [2]
 
         update.callback_query.message.edit_text('부지 이름을 입력해주세요.')
-
         
         return FARM_NAME
 
 
     def farm_image(self, update:Update, context:CallbackContext):
 
-
-        
         context.user_data['farm_name'].append(update.message.text)
         context.user_data['farm_name'].append('test')
 
@@ -135,7 +145,7 @@ class Farm():
         # photo_id = update.message.photo[-1].file_id  
         # photo_file = context.bot.getFile(photo_id)
         # photo_file.download(file_path)
-        # update.message.reply_text('사진 저장')
+        update.message.reply_text('저장 완료')
 
         return ConversationHandler.END
     #==================================================================
