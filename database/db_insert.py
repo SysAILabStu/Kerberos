@@ -1,4 +1,4 @@
-from db_manager import DBManager
+from database.db_manager import DBManager
 
 class DBInsert(DBManager):
     def table(tb_name, tbl_cols, values, setDate):
