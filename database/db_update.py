@@ -1,4 +1,4 @@
-from db_manager import DBManager
+from .db_manager import DBManager
 
 class DBUpdate(DBManager):
     def update(tbl_name, set_key, set_value, update_key, update_value):
