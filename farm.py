@@ -26,6 +26,7 @@ class Farm():
             entry_points = [CommandHandler('start',self.farm_select)],
             states = {
                 CLICK_BUTTON : [CallbackQueryHandler(self.farm_num)],
+                FARM_NUM : [MessageHandler(Filters.text & ~Filters.command, self.farm_add)],
                 FARM_NAME : [MessageHandler(Filters.text & ~Filters.command, self.farm_image)],
                 FARM_CLICK : [MessageHandler(Filters.photo, self.farm_delete)]
             },
@@ -64,7 +65,8 @@ class Farm():
         btn_list.append(InlineKeyboardButton("부지 삭제", callback_data="3"))
 
         show_markup = InlineKeyboardMarkup(self.build_menu(btn_list, len(btn_list)))
-
+  
+        
         update.message.reply_text("선택", reply_markup = show_markup)
 
         return CLICK_BUTTON
@@ -79,10 +81,11 @@ class Farm():
             return self.farm_confirm(update, context)
         
         elif query == "2":
-            return self.farm_add(update, context)
+            return self.farm_info_num(update, context)
 
         elif query == "3":
-            return self.farm_confirm(update, context)
+            return self.farm_delete_confirm(update, context)
+
 
 
 
@@ -99,7 +102,7 @@ class Farm():
         
         show_list = []
         data_list = []
-        select_one_value = ['farm_name' ]
+        select_one_value = ['farm_no' ]
 
         data = DBSelect.selectAll('farm_info', select_one_value)
 
@@ -116,19 +119,24 @@ class Farm():
         
         context.bot.send_message(self.user_id,"나의 부지", reply_markup=show_markup)
 
-        return FARM_CLICK
     #========================================================================
 
         
     # 부지 추가
 
+    def farm_info_num(self, update:Update, context:CallbackContext) -> None:
+
+        update.callback_query.message.edit_text('부지 번호를 입력해주세요.')
+        
+        return FARM_NUM
+
     def farm_add(self, update:Update, context:CallbackContext) -> None:
 
         #TEST#
-
-        context.user_data['farm_name'] = [2]
-
-        update.callback_query.message.edit_text('부지 이름을 입력해주세요.')
+        context.user_data['farm_name'] = []
+        context.user_data['farm_name'].append(update.message.text)
+        
+        update.message.reply_text('부지 이름을 입력해주세요.')
         
         return FARM_NAME
 
@@ -152,10 +160,37 @@ class Farm():
 
 
     #부지 삭제 
-    def farm_delete(self,  update: Update, context: CallbackContext) -> None:
-        query = update.callback_query.data
 
-        file = f'{query}.png'
+    def farm_delete_confirm(self, update: Update, context: CallbackContext) -> None:
+        
+        show_list = []
+        data_list = []
+        select_one_value = ['farm_no' ]
+
+        data = DBSelect.selectAll('farm_info', select_one_value)
+
+        for i in data:
+            data_list.append(i[0])
+
+        for i in range(len(data_list)):
+            show_list.append([InlineKeyboardButton(f"{data_list[i]}",\
+                callback_data=f"{data_list[i]}")])
+
+        print(data_list)
+
+        show_markup = InlineKeyboardMarkup(show_list)
+        
+        context.bot.send_message(self.user_id,"나의 부지", reply_markup=show_markup)
+
+        return FARM_DELETE
+
+
+
+    def farm_delete(self,  update: Update, context: CallbackContext) -> None:
+
+        query = update.callback_query.data
+        print(query)
+        
 
         if os.path.isfile(file):
             os.remove(file)
@@ -165,6 +200,7 @@ class Farm():
         update.callback_query.message.edit_text(f"{query} 삭제 완료")
         return ConversationHandler.END
     #================================================================
+
 
 
 kkk = Farm()
