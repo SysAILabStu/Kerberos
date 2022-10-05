@@ -5,7 +5,7 @@ from config import *
 
 
 # 입력데이터 예시
-farm_info_insertvalue = [1111, '진우네 농장', '-']
+farm_info_insertvalue = [20181586, '진우네 농장', '-']
 farm_detail_insertvalue = [2222, 281]
 doctor_insertvalue = ['김현기', '010-1234-1234', 'edu@hanbat.ac.kr']
 owner_insertvalue = [12348171, 1111]

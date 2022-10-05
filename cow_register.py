@@ -1,12 +1,13 @@
 from importlib.metadata import entry_points
+from database.db_select import *
+from database.db_insert import *
 from telegram import *
 from telegram.ext import *
 
 from integrated_definition import *
 
 class Cow_RG():
-    def __init__(self, db) -> None:
-        self.db = db
+    def __init__(self) -> None:
 
         self.cow_register_handler = ConversationHandler(
             entry_points = [CommandHandler('cow',self.Cow_Region_select)],
@@ -31,7 +32,7 @@ class Cow_RG():
     #등록할 소의 축사 번호 선택
     def Cow_Region_select(self, update: Update, context: CallbackContext)->str:
         self.u_id  = update.effective_chat.id
-
+        print(self.u_id)
         #데이터베이스에서 부지명 가져오기(입력값 : self.u_id)
         region_list = ['부지1', '부지2']
         buttons = []
