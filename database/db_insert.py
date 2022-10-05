@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 from .db_manager import DBManager
-=======
-from db_manager import DBManager
->>>>>>> 4f3b6b69ecd2e1e4e119872031bf1e7c1ca6b75f
 
 class DBInsert(DBManager):
     def table(tb_name, tbl_cols, values, setEstrous = False, setPregnent = False):
@@ -38,11 +34,7 @@ class DBInsert(DBManager):
         VALUES ({sql_data})
         """
 
-<<<<<<< HEAD
         print(sql)
-=======
-
->>>>>>> 4f3b6b69ecd2e1e4e119872031bf1e7c1ca6b75f
 
         con = DBManager.connect()
         DBManager.commit(con, sql)

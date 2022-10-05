@@ -1,10 +1,6 @@
 import pymysql
 import sqlite3
-<<<<<<< HEAD
 from .config import *
-=======
-from config import *
->>>>>>> 4f3b6b69ecd2e1e4e119872031bf1e7c1ca6b75f
 
 class DBManager:
     """
