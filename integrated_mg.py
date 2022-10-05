@@ -18,7 +18,6 @@ class IntegrateMANAGER():
         self.updater = Updater(update_token)
         self.dispatcher = self.updater.dispatcher
 
-
         self.db = db
         self.function_list = function_list
 
@@ -39,7 +38,6 @@ class IntegrateMANAGER():
         self.dispatcher.add_handler(CommandHandler("cancel", self.cancel))
 
         self.updater.start_polling()
-        self.engine.start_engine()
         self.updater.idle()
 
         
