@@ -1,7 +1,7 @@
-from database.db_manager import DBManager
+from db_manager import DBManager
 
 class DBInsert(DBManager):
-    def table(tb_name, tbl_cols, values, setDate):
+    def table(tb_name, tbl_cols, values, setEstrous = False, setPregnent = False):
         """
         tb_cols = (device_id, device_sno...)
         values = (device_id.data, ...)
@@ -9,16 +9,11 @@ class DBInsert(DBManager):
 
         arg = [f"{x}" for x in tbl_cols]
 
-        if 'idx' in arg:
-            del arg[arg.index('idx')]
-        
-        if 'date' in arg:
-            del arg[arg.index('date')]
-
-        if setDate == False:
+        if setEstrous == False:
             if 'cow_estrous' in arg:
                 del arg[arg.index('cow_estrous')]
 
+        if setPregnent == False:
             if 'cow_pregnent' in arg:
                 del arg[arg.index('cow_pregnent')]
         

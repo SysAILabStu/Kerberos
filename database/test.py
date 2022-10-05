@@ -28,10 +28,10 @@ set_value = [3333, ]
 update_key = ['farm_no', ]
 update_value = [1111, ]
 # farm_info 테이블에 데이터 입력 예시
-# DBInsert.table('farm_info', farm_info_cols, farm_info_insertvalue, False)
+DBInsert.table('farm_info', farm_info_cols, farm_info_insertvalue, False, False)
 
 # farm_detail 테이블에 데이터 입력 예시
-# DBInsert.table('farm_detail', farm_detail_cols, farm_detail_insertvalue, False)
+# DBInsert.table('farm_detail', farm_detail_cols, farm_detail_insertvalue)
 
 # doctor 테이블에 데이터 입력 예시
 # DBInsert.table('doctor', doctor_cols, doctor_insertvalue, False)
