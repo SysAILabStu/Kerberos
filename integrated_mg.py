@@ -14,11 +14,10 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 class IntegrateMANAGER():
-    def __init__(self, update_token, db,function_list) -> None:
+    def __init__(self, update_token,function_list) -> None:
         self.updater = Updater(update_token)
         self.dispatcher = self.updater.dispatcher
 
-        self.db = db
         self.function_list = function_list
 
     def cancel(self, update: Update, context: CallbackContext) -> int:
@@ -30,7 +29,7 @@ class IntegrateMANAGER():
     def main(self):
 
         for function in self.function_list:
-            handler = FunctionHandler(self.function_list,self.db)
+            handler = FunctionHandler(self.function_list)
             self.dispatcher.add_handler(handler.get_conv_handler())
 
         # self.dispatcher.add_handler(WorkSheetHandler.get_handler)

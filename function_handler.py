@@ -6,12 +6,11 @@ from integrated_definition import *
 from cow_register import *
 
 class FunctionHandler():
-    def __init__(self,function_list,db) -> None:
-        self.db = db
+    def __init__(self,function_list) -> None:
         self.function_list = function_list
 
         #기능별 Handler부착
-        self.handlers = [Cow_RG(self.db)]
+        self.handlers = [Cow_RG()]
 
     def get_conv_handler(self):
         self.conv_handlers = [x.get_handler() for x in self.handlers]

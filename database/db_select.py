@@ -92,6 +92,10 @@ class DBSelect(DBManager):
 
         rows = DBManager.fetchall(con, sql)
 
+<<<<<<< HEAD
         print(rows)
 
         return rows
+=======
+        return rows
+>>>>>>> 4f3b6b69ecd2e1e4e119872031bf1e7c1ca6b75f

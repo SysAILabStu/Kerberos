@@ -11,7 +11,7 @@ function_list = ['/farm','/cow','/doctor']
 
 db = DBManager.connect
 #sh자리에 데이터베이스 투입
-im = IntegrateMANAGER(TELEGRAM_TOKEN,db,function_list)
+im = IntegrateMANAGER(TELEGRAM_TOKEN,function_list)
 
 im.main()
 
