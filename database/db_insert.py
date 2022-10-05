@@ -1,13 +1,13 @@
 from db_manager import DBManager
 
 class DBInsert(DBManager):
-    def table(tb_name, tb_cols, values, setDate):
+    def table(tb_name, tbl_cols, values, setDate):
         """
         tb_cols = (device_id, device_sno...)
         values = (device_id.data, ...)
         """
 
-        arg = [f"{x}" for x in tb_cols]
+        arg = [f"{x}" for x in tbl_cols]
         print(arg)
 
         if 'idx' in arg:

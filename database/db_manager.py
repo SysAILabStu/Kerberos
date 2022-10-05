@@ -25,4 +25,9 @@ class DBManager:
         con.commit()
         con.close
 
+    def select(con, sql):
+        cur = con.cursor()
+        cur.execute(sql)
+        rows = cur.fetchall()
+        return rows
 
