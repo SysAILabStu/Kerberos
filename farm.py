@@ -19,7 +19,7 @@ class Farm():
         con = DBManager.connect()
 
         
-        updater = Updater("5431097144:AAGt813IWJ_eDJVJjngYec0koEux9w_w8wI")
+        updater = Updater("Your Token")
         dispatcher = updater.dispatcher 
 
         self.farm_handler = ConversationHandler(
@@ -121,7 +121,6 @@ class Farm():
 
     #========================================================================
 
-        
     # 부지 추가
 
     def farm_info_num(self, update:Update, context:CallbackContext) -> None:
@@ -201,8 +200,7 @@ class Farm():
         return ConversationHandler.END
     #================================================================
 
-
-
 kkk = Farm()
 
 kkk.__init__()
+
