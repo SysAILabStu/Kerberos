@@ -19,8 +19,8 @@ class Farm():
         con = DBManager.connect()
 
         
-        updater = Updater("5431097144:AAGt813IWJ_eDJVJjngYec0koEux9w_w8wI")
-        dispatcher = updater.dispatcher 
+        # updater = Updater("5431097144:AAGt813IWJ_eDJVJjngYec0koEux9w_w8wI")
+        # dispatcher = updater.dispatcher 
 
         self.farm_handler = ConversationHandler(
             entry_points = [CommandHandler('farm',self.farm_select)],
@@ -33,11 +33,10 @@ class Farm():
             fallbacks = [CommandHandler('cancel',self.cancel)],
         )
 
-        dispatcher.add_handler(self.farm_handler)
+        # dispatcher.add_handler(self.farm_handler)
 
-        updater.start_polling()
-        updater.idle()
-
+        # updater.start_polling()
+        # updater.idle()
 
 
     def get_handler(self) -> Dispatcher:
@@ -201,8 +200,6 @@ class Farm():
     #================================================================
 
 
-    def get_handler(self) -> Dispatcher:
-        return self.farm_handler
 
 # kkk = Farm()
 
