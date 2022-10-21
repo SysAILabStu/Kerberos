@@ -109,7 +109,7 @@ class Cow_RG():
         if pragment_data == 'O':
             context.user_data[PRAGMENT_] = datetime.datetime.now().strftime("%y-%m-%d")
         else:
-            context.user_data[PRAGMENT_] = None
+            context.user_data[PRAGMENT_] = '0-0-0'
         estrous_list = ['O', 'X']
         buttons = []
 
@@ -134,7 +134,7 @@ class Cow_RG():
         if estrous_data == 'O':
             context.user_data[ESTROUS_] = datetime.datetime.now().strftime("%y-%m-%d")
         else:
-            context.user_data[ESTROUS_] = None
+            context.user_data[ESTROUS_] = '0-0-0'
             
         print([str(self.u_id),context.user_data[COW_INPUT],context.user_data[PRAGMENT_],context.user_data[ESTROUS_]])
 
