@@ -2,6 +2,7 @@ from telegram import *
 from telegram.ext import *
 
 from integrated_definition import *
+from farm import *
 
 from cow_register import *
 from farm import *
