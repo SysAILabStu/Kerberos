@@ -2,6 +2,7 @@ from telegram import *
 from telegram.ext import *
 
 from integrated_definition import *
+from farm import *
 
 from cow_register import *
 
@@ -10,7 +11,7 @@ class FunctionHandler():
         self.function_list = function_list
 
         #기능별 Handler부착
-        self.handlers = [Cow_RG()]
+        self.handlers = [Cow_RG(),Farm()]
 
     def get_conv_handler(self):
         self.conv_handlers = [x.get_handler() for x in self.handlers]

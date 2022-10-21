@@ -19,11 +19,11 @@ class Farm():
         con = DBManager.connect()
 
         
-        updater = Updater("5431097144:AAGt813IWJ_eDJVJjngYec0koEux9w_w8wI")
-        dispatcher = updater.dispatcher 
+        # updater = Updater("5431097144:AAGt813IWJ_eDJVJjngYec0koEux9w_w8wI")
+        # dispatcher = updater.dispatcher 
 
         self.farm_handler = ConversationHandler(
-            entry_points = [CommandHandler('start',self.farm_select)],
+            entry_points = [CommandHandler('farm',self.farm_select)],
             states = {
                 CLICK_BUTTON : [CallbackQueryHandler(self.farm_num)],
                 FARM_NUM : [MessageHandler(Filters.text & ~Filters.command, self.farm_add)],
@@ -33,10 +33,10 @@ class Farm():
             fallbacks = [CommandHandler('cancel',self.cancel)],
         )
 
-        dispatcher.add_handler(self.farm_handler)
+        # dispatcher.add_handler(self.farm_handler)
 
-        updater.start_polling()
-        updater.idle()
+        # updater.start_polling()
+        # updater.idle()
 
 
 
@@ -203,6 +203,6 @@ class Farm():
 
 
 
-kkk = Farm()
+# kkk = Farm()
 
-kkk.__init__()
+# kkk.__init__()
