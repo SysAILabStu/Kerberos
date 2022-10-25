@@ -17,8 +17,6 @@ class Farm():
     def __init__(self):
 
         con = DBManager.connect()
-        # updater = Updater("5431097144:AAGt813IWJ_eDJVJjngYec0koEux9w_w8wI")
-        # dispatcher = updater.dispatcher 
 
         self.farm_handler = ConversationHandler(
             entry_points = [CommandHandler('farm',self.farm_select)],
@@ -31,10 +29,7 @@ class Farm():
             fallbacks = [CommandHandler('cancel',self.cancel)],
         )
 
-        # dispatcher.add_handler(self.farm_handler)
 
-        # updater.start_polling()
-        # updater.idle()
 
 
     def get_handler(self) -> Dispatcher:
@@ -185,9 +180,8 @@ class Farm():
     def farm_delete(self,  update: Update, context: CallbackContext) -> None:
 
         query = update.callback_query.data
-        print(query)
-        
 
+        
         if os.path.isfile(file):
             os.remove(file)
             context.user_data['farm_name'].remove(query)
