@@ -201,9 +201,5 @@ class Farm():
 
 # kkk = Farm()
 
-<<<<<<< HEAD
 # kkk.__init__()
 
-=======
-# kkk.__init__()
->>>>>>> f0d50a75757cb291bff9ec5d396e8bbaa1c61363
