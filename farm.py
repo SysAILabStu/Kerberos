@@ -34,12 +34,6 @@ class Farm():
         )
 
         # dispatcher.add_handler(self.farm_handler)
-<<<<<<< HEAD
-=======
-
-        # updater.start_polling()
-        # updater.idle()
->>>>>>> kjw
 
         # updater.start_polling()
         # updater.idle()
@@ -208,11 +202,5 @@ class Farm():
 
 
 # kkk = Farm()
-<<<<<<< HEAD
 
 # kkk.__init__()
-
-=======
-
-# kkk.__init__()
->>>>>>> kjw

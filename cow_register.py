@@ -14,9 +14,16 @@ class Cow_RG():
     def __init__(self) -> None:
 
         self.cow_register_handler = ConversationHandler(
-            entry_points = [CommandHandler('cow',self.Cow_Region_select)],
+            entry_points = [CommandHandler('cow',self.Cow_select_funtion)],
             states={
+                
+                SELECT_FUNCTION:[
+                    CallbackQueryHandler(self.Cow_Region_select,pattern='^' + '소 정보 등록' + '$'),
+                    CallbackQueryHandler(self.show_cow,pattern='^' + '소 정보 확인' + '$'),
+                ],
+
                 REGION_SELECT : [CallbackQueryHandler(self.Cow_number_input,pattern='^(?!' + str(END) + ').*$')],
+
                 COW_INPUT : [MessageHandler(Filters.text, self.Cow_number_output)],
                 PRAGMENT_ : [CallbackQueryHandler(self.Cow_estrous,pattern='^(?!' + str(END) + ').*$')],
                 ESTROUS_ : [CallbackQueryHandler(self.Cow_end,pattern='^(?!' + str(END) + ').*$')]
@@ -33,10 +40,27 @@ class Cow_RG():
     def get_handler(self) -> Dispatcher:
         return self.cow_register_handler
 
+
+    #소등록, 소 정보확인 선택
+    def Cow_select_funtion(self, update:Update, context:CallbackContext):
+        self.u_id  = update.effective_chat.id
+
+        function_list = ['소 정보 등록','소 정보 확인']
+        buttons = []
+
+        for fc in function_list:
+            buttons.append([InlineKeyboardButton(text = fc, callback_data = fc)],)
+
+        keyboard = InlineKeyboardMarkup(buttons,one_time_keyboard=True)
+
+        context.bot.send_message(self.u_id,text = "기능을 선택해주세요",\
+            reply_markup = keyboard)
+
+        return SELECT_FUNCTION
+
     #등록할 소의 축사 번호 선택
     def Cow_Region_select(self, update: Update, context: CallbackContext)->str:
-        self.u_id  = update.effective_chat.id
-    
+        
         #데이터베이스에서 부지명 가져오기(입력값 : self.u_id)
         region_list =DBSelect.one_search_key('farm_info', ['farm_name',] , 'farm_no', str(self.u_id))[0]
 
@@ -59,6 +83,16 @@ class Cow_RG():
         else:
             context.bot.send_message(self.u_id,text = "부지를 먼저 입력해주세요\n 재사작'/start")
             return ConversationHandler.END
+
+    #소 정보 확인
+    def show_cow(self, update:Update, context:CallbackContext):
+        cow_info = DBSelect.one_search_key('farm_detail',['*'],'farm_no',self.u_id)
+        
+        for j in cow_info:
+            text = f'등록번호{j[1]}\n임신여부{j[2]}\n발정여부{j[3]}'
+            context.bot.send_message(self.u_id,text = text)
+
+        return END
 
     #등록할 소의 번호 입력
     def Cow_number_input(self, update: Update, context: CallbackContext) -> int:
