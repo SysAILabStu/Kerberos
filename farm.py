@@ -3,7 +3,6 @@ import os
 import pymysql
 import sys
 
-
 from telegram import *
 from telegram.ext import *
 from global_variable import *
@@ -13,12 +12,11 @@ from database.config import *
 from database.db_select import *
 
 
+
 class Farm():
     def __init__(self):
 
         con = DBManager.connect()
-
-        
         # updater = Updater("5431097144:AAGt813IWJ_eDJVJjngYec0koEux9w_w8wI")
         # dispatcher = updater.dispatcher 
 
@@ -34,12 +32,6 @@ class Farm():
         )
 
         # dispatcher.add_handler(self.farm_handler)
-<<<<<<< HEAD
-=======
-
-        # updater.start_polling()
-        # updater.idle()
->>>>>>> kjw
 
         # updater.start_polling()
         # updater.idle()
@@ -107,7 +99,7 @@ class Farm():
         
         show_list = []
         data_list = []
-        select_one_value = ['farm_no' ]
+        select_one_value = ['farm_name' ]
 
         data = DBSelect.selectAll('farm_info', select_one_value)
 
@@ -208,11 +200,6 @@ class Farm():
 
 
 # kkk = Farm()
-<<<<<<< HEAD
 
 # kkk.__init__()
 
-=======
-
-# kkk.__init__()
->>>>>>> kjw

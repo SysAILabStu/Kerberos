@@ -7,7 +7,7 @@ from telegram.ext import *
 
 
 #기능추가는 /영어
-function_list = ['/farm','/cow','/doctor']
+function_list = ['/farm','/cow','/doctor','/news']
 
 db = DBManager.connect
 #sh자리에 데이터베이스 투입
