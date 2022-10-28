@@ -10,6 +10,7 @@ from database.db_manager import DBManager
 from database.db_insert import DBInsert
 from database.config import *
 from database.db_select import *
+from database.db_delete import *
 
 
 
@@ -24,12 +25,14 @@ class Farm():
                 CLICK_BUTTON : [CallbackQueryHandler(self.farm_num)],
                 FARM_NUM : [MessageHandler(Filters.text & ~Filters.command, self.farm_add)],
                 FARM_NAME : [MessageHandler(Filters.text & ~Filters.command, self.farm_image)],
-                FARM_CLICK : [MessageHandler(Filters.photo, self.farm_delete)]
+                FARM_DELETE :  [CallbackQueryHandler(self.farm_delete)],
             },
             fallbacks = [CommandHandler('cancel',self.cancel)],
+
+            map_to_parent={
+                ConversationHandler.END:ConversationHandler.END
+            }
         )
-
-
 
 
     def get_handler(self) -> Dispatcher:
@@ -81,33 +84,35 @@ class Farm():
 
 
 
-    def cancel(self, update: Update, context: CallbackContext) -> int:
+    def cancel(self, update: Update, context: CallbackContext):
         """Display the gathered info and end the conversation."""
-        
-        context.user_data.clear()
-        update.message.reply_text("Cancel!")
-        return ConversationHandler.END
 
+        context.user_data.clear()
+        update.message.reply_text("종료 되었습니다.")
+        update.message.reply_text("새로 시작하시려면 /start 명령어를 사용하세요.")
+
+        return ConversationHandler.END
 
     #부지 확인
     def farm_confirm(self, update: Update, context: CallbackContext) -> None:
-        
-        show_list = []
-        data_list = []
-        select_one_value = ['farm_name' ]
 
-        data = DBSelect.selectAll('farm_info', select_one_value)
+        self.chat_id = update.effective_chat.id
+
+        self.show_list = []
+        self.data_list = []
+        self.select_one_value = ['farm_name' ]
+
+        data = DBSelect.one_search_key('farm_info', ['farm_name',] , 'farm_no', str(self.chat_id))
 
         for i in data:
-            data_list.append(i[0])
+            self.data_list.append(i[0])
 
-        for i in range(len(data_list)):
-            show_list.append([InlineKeyboardButton(f"{data_list[i]}",\
-                callback_data=f"{data_list[i]}")])
+        for i in range(len(self.data_list)):
+            self.show_list.append([InlineKeyboardButton(f"{self.data_list[i]}",url = 'https://thumbs.dreamstime.com/z/minsk-district-belarus-may-inside-interior-cowshed-cows-full-degree-panorama-minsk-district-belarus-may-138801640.jpg')])
 
-        print(data_list)
+       
 
-        show_markup = InlineKeyboardMarkup(show_list)
+        show_markup = InlineKeyboardMarkup(self.show_list)
         
         context.bot.send_message(self.user_id,"나의 부지", reply_markup=show_markup)
 
@@ -145,6 +150,7 @@ class Farm():
         # photo_file = context.bot.getFile(photo_id)
         # photo_file.download(file_path)
         update.message.reply_text('저장 완료')
+        update.message.reply_text("새로 시작하시려면 /start 명령어를 사용하세요.")
 
         return ConversationHandler.END
     #==================================================================
@@ -153,25 +159,24 @@ class Farm():
     #부지 삭제 
 
     def farm_delete_confirm(self, update: Update, context: CallbackContext) -> None:
-        
-        show_list = []
-        data_list = []
-        select_one_value = ['farm_no' ]
 
-        data = DBSelect.selectAll('farm_info', select_one_value)
+
+        self.show_list = []
+        self.data_list = []
+        self.select_one_value = ['farm_name' ]
+
+        data = DBSelect.selectAll('farm_info', self.select_one_value)
 
         for i in data:
-            data_list.append(i[0])
+            self.data_list.append(i[0])
 
-        for i in range(len(data_list)):
-            show_list.append([InlineKeyboardButton(f"{data_list[i]}",\
-                callback_data=f"{data_list[i]}")])
-
-        print(data_list)
-
-        show_markup = InlineKeyboardMarkup(show_list)
+        for i in range(len(self.data_list)):
+            self.show_list.append([InlineKeyboardButton(f"{self.data_list[i]}",\
+                callback_data=f"{self.data_list[i]}")])
+     
+        show_markup = InlineKeyboardMarkup(self.show_list)
         
-        context.bot.send_message(self.user_id,"나의 부지", reply_markup=show_markup)
+        context.bot.send_message(self.user_id,"삭제할 부지를 선택해 주세요", reply_markup=show_markup)
 
         return FARM_DELETE
 
@@ -180,14 +185,14 @@ class Farm():
     def farm_delete(self,  update: Update, context: CallbackContext) -> None:
 
         query = update.callback_query.data
+        one_delete_key = "farm_name"
+      
+        DBDelete.one_delete_key('farm_info',one_delete_key, query)
 
-        
-        if os.path.isfile(file):
-            os.remove(file)
-            context.user_data['farm_name'].remove(query)
 
-        # context.bot.send_photo(chat_id=update.effective_user.id,photo=open(f"{photo_name}.png",'rb'))
         update.callback_query.message.edit_text(f"{query} 삭제 완료")
+        update.callback_query.message.edit_text("새로 시작하시려면 /start 명령어를 사용하세요.")
+    
         return ConversationHandler.END
     #================================================================
 
