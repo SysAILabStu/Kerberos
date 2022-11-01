@@ -108,9 +108,10 @@ class Farm():
             self.data_list.append(i[0])
 
         for i in range(len(self.data_list)):
-            self.show_list.append([InlineKeyboardButton(f"{self.data_list[i]}",url = 'https://thumbs.dreamstime.com/z/minsk-district-belarus-may-inside-interior-cowshed-cows-full-degree-panorama-minsk-district-belarus-may-138801640.jpg')])
+            self.show_list.append([InlineKeyboardButton(f"{self.data_list[i]}",url = 
+            'https://thumbs.dreamstime.com/z/minsk-district-belarus-may-inside-interi\
+            or-cowshed-cows-full-degree-panorama-minsk-district-belarus-may-138801640.jpg')])
 
-       
 
         show_markup = InlineKeyboardMarkup(self.show_list)
         
@@ -129,8 +130,8 @@ class Farm():
     def farm_add(self, update:Update, context:CallbackContext) -> None:
 
         #TEST#
-        context.user_data['farm_name'] = []
-        context.user_data['farm_name'].append(update.message.text)
+        context.user_data['farm'] = []
+        context.user_data['farm'].append(update.message.text)
         
         update.message.reply_text('부지 이름을 입력해주세요.')
         
@@ -139,11 +140,11 @@ class Farm():
 
     def farm_image(self, update:Update, context:CallbackContext):
 
-        context.user_data['farm_name'].append(update.message.text)
-        context.user_data['farm_name'].append('test')
+        context.user_data['farm'].append(update.message.text)
+        context.user_data['farm'].append("row")
 
 
-        DBInsert.table('farm_info', farm_info_cols, context.user_data['farm_name'], False)
+        DBInsert.table('farm_info', farm_info_cols, context.user_data['farm'], False)
 
         # file_path = os.path.join(self.dir_now, context.user_data['farm_name']+".png")
         # photo_id = update.message.photo[-1].file_id  
