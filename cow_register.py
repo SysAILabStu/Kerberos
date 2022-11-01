@@ -20,9 +20,12 @@ class Cow_RG():
                 SELECT_FUNCTION:[
                     CallbackQueryHandler(self.Cow_Region_select,pattern='^' + '소 정보 등록' + '$'),
                     CallbackQueryHandler(self.show_cow,pattern='^' + '소 정보 확인' + '$'),
+                    CallbackQueryHandler(self.show_cow2,pattern='^' + '소 정보 삭제' + '$'),
                 ],
 
                 REGION_SELECT : [CallbackQueryHandler(self.Cow_number_input,pattern='^(?!' + str(END) + ').*$')],
+
+                DELETE_COW : [CallbackQueryHandler(self.cow_delete,pattern='^(?!' + str(END) + ').*$')],
 
                 COW_INPUT : [MessageHandler(Filters.text, self.Cow_number_output)],
                 PRAGMENT_ : [CallbackQueryHandler(self.Cow_estrous,pattern='^(?!' + str(END) + ').*$')],
@@ -45,7 +48,7 @@ class Cow_RG():
     def Cow_select_funtion(self, update:Update, context:CallbackContext):
         self.u_id  = update.effective_chat.id
 
-        function_list = ['소 정보 등록','소 정보 확인']
+        function_list = ['소 정보 등록','소 정보 확인','소 정보 삭제']
         buttons = []
 
         for fc in function_list:
@@ -197,3 +200,38 @@ class Cow_RG():
         update.message.reply_text("새로 시작하시려면 /start 명령어를 사용하세요.")
 
         return ConversationHandler.END
+
+#------------------------------------------------------------------------------
+
+    #소 정보 확인
+    def show_cow2(self, update:Update, context:CallbackContext):
+        cow_info = DBSelect.one_search_key('farm_detail',['*'],'farm_no',self.u_id)
+
+        buttons = []
+
+        for j in cow_info:
+            text = f'등록번호{j[1]}\n임신여부{j[2]}\n발정여부{j[3]}'
+            buttons.append([InlineKeyboardButton(text = text, callback_data = j[1])],)
+
+        keyboard = InlineKeyboardMarkup(buttons,one_time_keyboard=True)
+
+        context.bot.send_message(self.u_id,text = "삭제할 소를 선택해주세요",\
+            reply_markup = keyboard)
+        
+        
+
+        return DELETE_COW
+
+    #소 삭제
+    def cow_delete(self,  update: Update, context: CallbackContext) -> None:
+
+        query = update.callback_query.data
+        one_delete_key = "cow_no"
+      
+        DBDelete.one_delete_key('farm_detail',one_delete_key, query)
+
+
+        update.callback_query.message.edit_text(f"{query} 삭제 완료")
+        update.callback_query.message.edit_text("새로 시작하시려면 /start 명령어를 사용하세요.")
+    
+        return END
